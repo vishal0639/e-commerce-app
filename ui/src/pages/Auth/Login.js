@@ -3,9 +3,11 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Layout from "../../components/Layout/Layout";
+import { useAuth } from "../../context/auth";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [auth, setAuth] = useAuth();
   let initialAccount = {
     email: "",
     password: "",
@@ -18,11 +20,12 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(account);
     try {
       const res = await axios.post("/api/vi/auth/login", account);
       if (res?.data?.success) {
         toast.success(res.data && res.data.message);
+        setAuth({ ...auth, user: res.data.user, token: res.data.token });
+        localStorage.setItem("auth", JSON.stringify(res.data));
         navigate("/");
       } else {
         toast.error(res.data.message);
