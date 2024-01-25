@@ -5,6 +5,7 @@ import cors from "cors";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 import authRoute from "./Routes/authRoute.js";
+import categoryRoutes from "./Routes/categoryRoutes.js";
 //rest api
 config();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 
 //routes
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/category", categoryRoutes);
 
 //rest api
 app.get("/", (req, res) => {
