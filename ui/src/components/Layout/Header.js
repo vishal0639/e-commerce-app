@@ -27,7 +27,7 @@ function Header() {
             <span className="navbar-toggler-icon" />
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <Link to=" /" className="navbar-brand">
+            <Link to="" className="navbar-brand">
               🛒 E-commmerce App
             </Link>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -57,14 +57,37 @@ function Header() {
                 </>
               ) : (
                 <>
-                  <li className="nav-item">
-                    <NavLink
-                      to="/login"
-                      className="nav-link"
-                      onClick={handleLogOut}
+                  <li className="nav-item dropdown">
+                    <Link
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
                     >
-                      Log out
-                    </NavLink>
+                      {auth?.user?.name}
+                    </Link>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <NavLink
+                          className="dropdown-item"
+                          to={`/dashboard/${
+                            auth.user?.role === 1 ? "admin" : "user"
+                          }`}
+                        >
+                          Dashboard
+                        </NavLink>
+                      </li>
+                      <li className="dropdown-item">
+                        <NavLink
+                          to="/login"
+                          className="nav-link"
+                          onClick={handleLogOut}
+                        >
+                          Log out
+                        </NavLink>
+                      </li>
+                    </ul>
                   </li>
                 </>
               )}

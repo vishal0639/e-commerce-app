@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Layout from "../../components/Layout/Layout";
 import { useAuth } from "../../context/auth";
 
@@ -13,6 +13,7 @@ const Login = () => {
     password: "",
   };
   const [account, setAccount] = useState(initialAccount);
+  const location = useLocation();
 
   const changeHandler = (e) => {
     setAccount({ ...account, [e.target.name]: e.target.value });
@@ -21,12 +22,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/api/vi/auth/login", account);
+      const res = await axios.post("/api/v1/auth/login", account);
       if (res?.data?.success) {
         toast.success(res.data && res.data.message);
         setAuth({ ...auth, user: res.data.user, token: res.data.token });
         localStorage.setItem("auth", JSON.stringify(res.data));
-        navigate("/");
+        navigate(location.state || "/");
       } else {
         toast.error(res.data.message);
       }
@@ -66,6 +67,17 @@ const Login = () => {
               placeholder="Enter your password"
               required
             />
+          </div>
+          <div className="mb-3">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => {
+                navigate("/forget-password");
+              }}
+            >
+              Forgot Password
+            </button>
           </div>
           <button type="submit" className="btn btn-primary">
             Login

@@ -18,7 +18,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 //routes
-app.use("/api/vi/auth", authRoute);
+app.use("/api/v1/auth", authRoute);
 
 //rest api
 app.get("/", (req, res) => {

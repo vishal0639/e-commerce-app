@@ -4,14 +4,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Layout from "../../components/Layout/Layout";
 
-function Register() {
+const ForgotPassword = () => {
   const navigate = useNavigate();
   let initialAccount = {
-    name: "",
     email: "",
-    password: "",
-    phone: "",
-    address: "",
+    newPassword: "",
     answer: "",
   };
   const [account, setAccount] = useState(initialAccount);
@@ -22,9 +19,8 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(account);
     try {
-      const res = await axios.post("/api/v1/auth/register", account);
+      const res = await axios.post("/api/v1/auth/forgot-password", account);
       if (res?.data?.success) {
         toast.success(res.data && res.data.message);
         navigate("/login");
@@ -37,23 +33,10 @@ function Register() {
     }
   };
   return (
-    <Layout title={"Register E-commerce App"}>
+    <Layout title={"Forgot-Password E-commerce App"}>
       <div className="form-container">
         <form onSubmit={handleSubmit}>
-          <h1 className="title">REGISTER FORM</h1>
-          <div className="mb-3">
-            <input
-              onChange={(e) => {
-                changeHandler(e);
-              }}
-              type="text"
-              name="name"
-              value={account.name}
-              className="form-control"
-              placeholder="Enter your name"
-              required
-            />
-          </div>
+          <h1 className="title">RESET PASSWORD</h1>
           <div className="mb-3">
             <input
               onChange={(e) => {
@@ -73,8 +56,8 @@ function Register() {
                 changeHandler(e);
               }}
               type="password"
-              name="password"
-              value={account.password}
+              name="newPassword"
+              value={account.newPassword}
               className="form-control"
               id="exampleInputPassword1"
               placeholder="Enter your password"
@@ -87,46 +70,20 @@ function Register() {
                 changeHandler(e);
               }}
               type="text"
-              name="phone"
-              value={account.phone}
-              className="form-control"
-              placeholder="Enter your phone"
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <input
-              onChange={(e) => {
-                changeHandler(e);
-              }}
-              type="text"
-              name="address"
-              value={account.address}
-              className="form-control"
-              placeholder="Enter your address"
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <input
-              onChange={(e) => {
-                changeHandler(e);
-              }}
-              type="text"
               name="answer"
               value={account.answer}
               className="form-control"
-              placeholder="What is your favourite sport?"
+              placeholder="Enter your favourite sport?"
               required
             />
           </div>
           <button type="submit" className="btn btn-primary">
-            Submit
+            Reset
           </button>
         </form>
       </div>
     </Layout>
   );
-}
+};
 
-export default Register;
+export default ForgotPassword;
