@@ -6,6 +6,7 @@ import morgan from "morgan";
 import connectDB from "./config/db.js";
 import authRoute from "./Routes/authRoute.js";
 import categoryRoutes from "./Routes/categoryRoutes.js";
+import ProductRoutes from "./Routes/productRoutes.js";
 //rest api
 config();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 //routes
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/product", ProductRoutes);
 
 //rest api
 app.get("/", (req, res) => {
