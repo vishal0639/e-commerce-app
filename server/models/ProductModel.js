@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const {
   Schema: {
-    Types: { ObjectId: id },
+    Types: { ObjectId },
   },
 } = mongoose;
 
@@ -24,7 +24,7 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     category: {
-      type: id,
+      type: ObjectId,
       ref: "Category",
       required: true,
     },

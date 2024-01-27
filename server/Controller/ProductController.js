@@ -19,7 +19,7 @@ export const createProductController = async (req, res) => {
         return res.status(500).send({ message: "category is required" });
       case !quantity:
         return res.status(500).send({ message: "quantity is required" });
-      case !photo && photo.size > 100000:
+      case !photo && photo?.size > 100000:
         return res
           .status(500)
           .send({ message: "photo is required & should be less than 1mb" });
@@ -45,7 +45,7 @@ export const createProductController = async (req, res) => {
   }
 };
 
-//get products
+//get all products
 export const getProductController = async (req, res) => {
   try {
     const products = await ProductModel.find({})
@@ -128,7 +128,6 @@ export const deleteProductController = async (req, res) => {
 };
 
 //update product
-
 export const updateProductController = async (req, res) => {
   try {
     const { name, slug, description, price, category, quantity, shipping } =
@@ -146,11 +145,12 @@ export const updateProductController = async (req, res) => {
         return res.status(500).send({ message: "category is required" });
       case !quantity:
         return res.status(500).send({ message: "quantity is required" });
-      case !photo && photo.size > 100000:
+      case !photo && photo?.size > 100000:
         return res
           .status(500)
           .send({ message: "photo is required & should be less than 1mb" });
     }
+
     const products = await ProductModel.findByIdAndUpdate(
       req.params.pid,
       { ...req.fields, slug: slugify(name) },
