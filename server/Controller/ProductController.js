@@ -103,7 +103,7 @@ export const productPhotoController = async (req, res) => {
     console.log(err);
     res.status(500).send({
       success: false,
-      message: "Error while getting product",
+      message: "Error while getting product photo",
       err: err.message,
     });
   }
@@ -241,6 +241,53 @@ export const productListController = async (req, res) => {
       success: false,
       err,
       message: "Error while getting product list",
+    });
+  }
+};
+
+//search Product
+export const searchProductController = async (req, res) => {
+  try {
+    console.log("search");
+    const { keyword } = req.params;
+    const results = await ProductModel.find({
+      $or: [
+        { name: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } },
+      ],
+    }).select("-photo");
+    res.json(results);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send({
+      success: false,
+      message: "Error in searching Product",
+      err,
+    });
+  }
+};
+
+//similar product
+export const relatedProductController = async (req, res) => {
+  try {
+    const { pid, cid } = req.params;
+    const products = await ProductModel.find({
+      category: cid,
+      _id: { $ne: pid },
+    })
+      .select("-photo")
+      .limit(3)
+      .populate("category");
+    res.status(200).send({
+      success: true,
+      products,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).send({
+      success: false,
+      message: "Error while getting similar Product",
+      err,
     });
   }
 };

@@ -5,9 +5,11 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { Checkbox, Radio } from "antd";
 import { Prices } from "../components/Prices";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
   //const [auth, setAuth] = useAuth();
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -162,7 +164,12 @@ function HomePage() {
                     {p.description.substring(0, 24)}..
                   </p>
                   <p className="card-text mb-1">${p.price}</p>
-                  <button className="btn btn-primary ms-1">More Details</button>
+                  <button
+                    className="btn btn-primary ms-1"
+                    onClick={() => navigate(`/product/${p.slug}`)}
+                  >
+                    More Details
+                  </button>
                   <button className="btn btn-secondary ms-1">
                     Add To Cart
                   </button>
