@@ -148,3 +148,37 @@ export const forgotPasswordController = async (req, res) => {
     });
   }
 };
+
+//update profile
+export const updateProfileController = async (req, res) => {
+  try {
+    const { name, password, phone, address } = req.body;
+    const user = await UserModel.findById(req.user._id);
+    if (password && password.length < 5) {
+      return res.json({ error: "Password is required and 5 character long" });
+    }
+    const hashedPassword = password ? await hashPassword(password) : undefined;
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.user.id,
+      {
+        name: name || user.name,
+        password: hashedPassword || user.password,
+        phone: phone || user.phone,
+        address: address || user.address,
+      },
+      { new: true }
+    );
+    res.status(200).send({
+      success: true,
+      message: "Profile updated Successfully",
+      updatedUser,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong in updating profile",
+      err,
+    });
+  }
+};
