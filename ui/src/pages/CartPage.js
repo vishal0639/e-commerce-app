@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout/Layout";
 import { useCart } from "../context/cart";
 import { useAuth } from "../context/auth";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import DropIn from "braintree-web-drop-in-react";
 
 const CartPage = () => {
   const [cart, setCart] = useCart();
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
-
+  const [clientToken, setClientToken] = useState("");
+  const [instanse, setInstance] = useState("");
+  const [loading, setLoading] = useState(false);
   //total price
   const totalPrice = () => {
     try {
@@ -30,6 +34,28 @@ const CartPage = () => {
       myCart.splice(index, 1);
       setCart(myCart);
       localStorage.setItem("cart", JSON.stringify(myCart));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //get payment getway token
+  const getToken = async () => {
+    try {
+      const { data } = await axios.get("/api/v1/product/braintree/token");
+      setClientToken(data?.clientToken);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+  }, [auth?.token]);
+
+  //payment
+  const handlePayment = async () => {
+    try {
     } catch (err) {
       console.log(err);
     }
@@ -117,6 +143,25 @@ const CartPage = () => {
                 )}
               </div>
             )}
+            <div className="mt-2">
+              <h1>hii</h1>
+              <DropIn
+                options={{
+                  authorization: clientToken,
+                  paypal: {
+                    flow: "vault",
+                  },
+                }}
+                onInstance={(instanse) => setInstance(instanse)}
+              />
+              <button
+                className="btn btn-primary"
+                onClick={handlePayment}
+                disabled={!loading || auth?.user?.address}
+              >
+                Make Payment
+              </button>
+            </div>
           </div>
         </div>
       </div>
