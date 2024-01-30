@@ -5,6 +5,9 @@ import {
   testController,
   forgotPasswordController,
   updateProfileController,
+  getOrdersController,
+  getAllOrdersController,
+  orderStatusController,
 } from "../Controller/authController.js";
 import { isAdmin, requiresSignIn } from "../middleware/authMiddleware.js";
 
@@ -31,5 +34,18 @@ router.get("/admin-auth", requiresSignIn, isAdmin, (req, res) => {
 
 //update profile
 router.route("/profile").put(requiresSignIn, updateProfileController);
+
+//orders
+router.route("/orders").get(requiresSignIn, getOrdersController);
+
+//All orders
+router
+  .route("/all-orders")
+  .get(requiresSignIn, isAdmin, getAllOrdersController);
+
+//status-update
+router
+  .route("/order-status/:orderId")
+  .put(requiresSignIn, isAdmin, orderStatusController);
 
 export default router;
